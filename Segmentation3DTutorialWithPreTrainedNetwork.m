@@ -55,28 +55,37 @@ pxdsTest = pixelLabelDatastore(lblLocTest,classNames,pixelLabelID, ...
 %medfilt3 does not support categorical data, so cast the pixel label IDs to uint8 before the calculation. 
 %Then, cast the filtered labels back to the categorical data type, specifying the original pixel label IDs and class names.
 % 
-% id=1;
-% while hasdata(voldsTest)
-%     disp(['Processing test volume ' num2str(id)])
-%     
-%     groundTruthLabels{id} = read(pxdsTest);
-%     
-%     vol{id} = read(voldsTest);
-%     tempSeg = semanticseg(vol{id},net);
-% 
-%     % Get the non-brain region mask from the test image.
-%     volMask = vol{id}(:,:,:,1)==0;
-%     % Set the non-brain region of the predicted label as background.
-%     tempSeg(volMask) = classNames(1);
-%     % Perform median filtering on the predicted label.
-%     tempSeg = medfilt3(uint8(tempSeg)-1);
-%     % Cast the filtered label to categorial.
-%     tempSeg = categorical(tempSeg,pixelLabelID,classNames);
-%     predictedLabels{id} = tempSeg;
-%     id=id+1;
-% end
+if exist( 'predictedLabels') ==1  
+    
+%file exists in workspace 
 
- predictedLabels
+else
+    
+id=1;
+while hasdata(voldsTest)
+    disp(['Processing test volume ' num2str(id)])
+    
+    groundTruthLabels{id} = read(pxdsTest);
+    
+    vol{id} = read(voldsTest);
+    tempSeg = semanticseg(vol{id},net);
+
+    % Get the non-brain region mask from the test image.
+    volMask = vol{id}(:,:,:,1)==0;
+    % Set the non-brain region of the predicted label as background.
+    tempSeg(volMask) = classNames(1);
+    % Perform median filtering on the predicted label.
+    tempSeg = medfilt3(uint8(tempSeg)-1);
+    % Cast the filtered label to categorial.
+    tempSeg = categorical(tempSeg,pixelLabelID,classNames);
+    predictedLabels{id} = tempSeg;
+    id=id+1;
+end
+
+end
+
+% 
+%  predictedLabels
 
 
 
@@ -156,4 +165,6 @@ if createBoxplot
     xticklabels(classNames)
     ylabel('Dice Coefficient')
 end
+
+
 
