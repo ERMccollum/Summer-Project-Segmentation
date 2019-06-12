@@ -1,3 +1,9 @@
+%Download nifti file,convert into mat file for use in segmentation
+% load_nii('input.nii')
+% convertedmatlabfile = readnifti('inputnifti.nii')
+
+
+
 %DOWNLOAD PRETRAINED NETWORK AND SAMPLE TEST SET
 trained3DUnet_url = 'https://www.mathworks.com/supportfiles/vision/data/brainTumor3DUNet.mat';
 sampleData_url = 'https://www.mathworks.com/supportfiles/vision/data/sampleBraTSTestSet.tar.gz';
